@@ -13,25 +13,31 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function App() {
+export const Pages: React.FC = () => {
   const { activeAccount, accounts, exchange, setActiveAccount } = useAccountsReducer();
 
+  return (
+    <Switch>
+      <Route path={ROUTES.exchange}>
+        <Converter activeAccount={activeAccount} accounts={accounts} exchange={exchange} />
+      </Route>
+      <Route path={ROUTES.home}>
+        <Balance
+          activeAccount={activeAccount}
+          accounts={accounts}
+          setActiveAccount={setActiveAccount}
+        />
+      </Route>
+    </Switch>
+  );
+};
+
+function App() {
   return (
     <ApolloProvider client={client}>
       <Container>
         <Router>
-          <Switch>
-            <Route path={ROUTES.exchange}>
-              <Converter activeAccount={activeAccount} accounts={accounts} exchange={exchange} />
-            </Route>
-            <Route path={ROUTES.home}>
-              <Balance
-                activeAccount={activeAccount}
-                accounts={accounts}
-                setActiveAccount={setActiveAccount}
-              />
-            </Route>
-          </Switch>
+          <Pages />
         </Router>
       </Container>
     </ApolloProvider>

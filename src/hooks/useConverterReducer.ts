@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 
 import { CurrencyCode } from '../constants';
 import { roundToDecimals } from '../utils';
@@ -18,7 +18,8 @@ type Action =
   | { type: 'SET_BASE_VALUE'; payload: { value: number; quoteRate: number } }
   | { type: 'SET_QUOTE_VALUE'; payload: { value: number; quoteRate: number } }
   | { type: 'SET_BASE_CURRENCY'; payload: CurrencyCode }
-  | { type: 'SET_QUOTE_CURRENCY'; payload: CurrencyCode };
+  | { type: 'SET_QUOTE_CURRENCY'; payload: CurrencyCode }
+  | { type: 'RECALC_QUOTE_VALUE'; payload: number };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -76,6 +77,15 @@ const reducer = (state: State, action: Action): State => {
         },
       };
 
+    case 'RECALC_QUOTE_VALUE':
+      return {
+        ...state,
+        quote: {
+          ...state.quote,
+          value: roundToDecimals(state.quote.value * action.payload),
+        },
+      };
+
     default:
       return state;
   }
@@ -113,5 +123,20 @@ export const useConverterReducer = ({
   const setQuoteValue = (value: number, quoteRate: number) =>
     dispatch({ type: 'SET_QUOTE_VALUE', payload: { value, quoteRate } });
 
-  return { base, quote, setQuoteCurrency, setBaseCurrency, setBaseValue, setQuoteValue };
+  const recalcQuoteValue = useCallback(
+    (quoteRate: number) => {
+      dispatch({ type: 'RECALC_QUOTE_VALUE', payload: quoteRate });
+    },
+    [dispatch],
+  );
+
+  return {
+    base,
+    quote,
+    setQuoteCurrency,
+    setBaseCurrency,
+    setBaseValue,
+    setQuoteValue,
+    recalcQuoteValue,
+  };
 };

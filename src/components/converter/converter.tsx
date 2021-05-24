@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import Select from 'react-select';
 
@@ -38,11 +39,18 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
   }));
   const defaultQuoteCurrency = accountsList.filter((account) => account !== activeAccount)[0];
 
-  const { base, quote, setBaseValue, setQuoteValue, setBaseCurrency, setQuoteCurrency } =
-    useConverterReducer({
-      baseCurrency: activeAccount,
-      quoteCurrency: defaultQuoteCurrency,
-    });
+  const {
+    base,
+    quote,
+    setBaseValue,
+    setQuoteValue,
+    setBaseCurrency,
+    setQuoteCurrency,
+    recalcQuoteValue,
+  } = useConverterReducer({
+    baseCurrency: activeAccount,
+    quoteCurrency: defaultQuoteCurrency,
+  });
 
   const baseAccountFunds = accounts[base.currency]?.amount || 0;
   const quoteAccountFunds = accounts[quote.currency]?.amount || 0;
@@ -51,6 +59,13 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
     baseCurrency: base.currency,
     quoteCurrency: quote.currency,
   });
+
+  // watch for quote rate changes
+  useEffect(() => {
+    if (quoteRate) {
+      recalcQuoteValue(quoteRate);
+    }
+  }, [quoteRate, recalcQuoteValue]);
 
   if (loading)
     return (
@@ -97,7 +112,7 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
           </SelectContainer>
           <ConverterInput value={base.value} onChange={handleBaseValueChange} autofocus />
         </InputsContainer>
-        <ExtraInfo>
+        <ExtraInfo data-testid="base-account-balance">
           You have {roundToDecimals(baseAccountFunds)} {base.currency}
         </ExtraInfo>
         <ExtraInfo>
