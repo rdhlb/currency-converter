@@ -1,6 +1,8 @@
-# Getting Started with Create React App
+# Currency Converter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To work with the app add a valid `REACT_APP_RATES_API_URL` with an API key as a query parameter.
+
+Or reach out to the author to get a link for the deployed version.
 
 ## Available Scripts
 
