@@ -16,7 +16,7 @@ export const CURRENCY_SYMBOLS: Record<CurrencyCode, string> = {
   CAD: '$',
 };
 
-export const RATES_POLL_INTERVAL = 60 * 1000; // 60 sec
+export const RATES_POLL_INTERVAL = 10 * 1000;
 
 export enum ROUTES {
   home = '/',
