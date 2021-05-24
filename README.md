@@ -1,6 +1,6 @@
 # Currency Converter
 
-To work with the app add a valid `REACT_APP_RATES_API_URL` with an API key as a query parameter.
+To work with the app add a valid variable `REACT_APP_RATES_API_URL` with an API key as a query parameter to `.env.local` file.
 
 Or reach out to the author to get a link for the deployed version.
 
