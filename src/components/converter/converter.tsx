@@ -73,7 +73,7 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
         <Loading>Loading...</Loading>
       </Container>
     );
-  if (error) return <Container>Error :(</Container>;
+  if (error) return <Container>Error :( {error.message}</Container>;
 
   const handleBaseValueChange = (value: number) => {
     setBaseValue(value, quoteRate);
@@ -110,7 +110,12 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
               isSearchable={false}
             />
           </SelectContainer>
-          <ConverterInput value={base.value} onChange={handleBaseValueChange} autofocus />
+          <ConverterInput
+            value={base.value}
+            onChange={handleBaseValueChange}
+            autofocus
+            placeholder="From"
+          />
         </InputsContainer>
         <ExtraInfo data-testid="base-account-balance">
           You have {roundToDecimals(baseAccountFunds)} {base.currency}
@@ -135,7 +140,7 @@ export const Converter: React.FC<Props> = ({ activeAccount, accounts, exchange }
               isSearchable={false}
             />
           </SelectContainer>
-          <ConverterInput value={quote.value} onChange={handleQuoteValueChange} />
+          <ConverterInput value={quote.value} onChange={handleQuoteValueChange} placeholder="To" />
         </InputsContainer>
         <ExtraInfo>
           You have {roundToDecimals(quoteAccountFunds)} {quote.currency}

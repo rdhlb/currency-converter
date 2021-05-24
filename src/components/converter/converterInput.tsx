@@ -5,9 +5,15 @@ type Props = {
   onChange: (value: number) => void;
   value: number;
   autofocus?: boolean;
+  placeholder?: string;
 };
 
-export const ConverterInput: React.FC<Props> = ({ onChange, value, autofocus = false }) => {
+export const ConverterInput: React.FC<Props> = ({
+  onChange,
+  value,
+  autofocus = false,
+  placeholder,
+}) => {
   const handleValueChange: React.ChangeEventHandler<HTMLInputElement> = ({
     target: { valueAsNumber },
   }) => {
@@ -28,6 +34,8 @@ export const ConverterInput: React.FC<Props> = ({ onChange, value, autofocus = f
         step="0.01"
         onChange={handleValueChange}
         autoFocus={autofocus}
+        aria-label="Currency Amount Field"
+        placeholder={placeholder}
       />
     </div>
   );
@@ -43,4 +51,8 @@ const Input = styled.input`
   border: 1px solid rgba(0, 0, 0, 0.23);
   border: 3px solid white;
   color: white;
+
+  ::placeholder {
+    color: white;
+  }
 `;

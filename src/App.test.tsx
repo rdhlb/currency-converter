@@ -7,6 +7,14 @@ import { CurrencyCode } from './constants';
 import { GET_LATEST_RATES } from './operations/queries/getLatestRates';
 import { render } from './testUtils';
 
+jest.mock('./constants', () => {
+  const constants = jest.requireActual('./constants');
+  return {
+    ...constants,
+    RATES_POLL_INTERVAL: 0,
+  };
+});
+
 const graphQLMock: MockedResponse = {
   request: {
     query: GET_LATEST_RATES,
@@ -19,7 +27,7 @@ const graphQLMock: MockedResponse = {
   },
 };
 
-describe('App', () => {
+describe('Whole App', () => {
   test('sets active account as base for exchange and navigates to exchange screen', async () => {
     render(<App />, { graphQLMocks: [graphQLMock] });
 
