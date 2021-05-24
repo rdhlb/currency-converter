@@ -1,14 +1,15 @@
 import { useReducer } from 'react';
 
 import { CurrencyCode } from '../constants';
+import { roundToDecimals } from '../utils';
 
 type State = {
   base: {
-    value?: number;
+    value: number;
     currency: CurrencyCode;
   };
   quote: {
-    value?: number;
+    value: number;
     currency: CurrencyCode;
   };
 };
@@ -30,7 +31,7 @@ const reducer = (state: State, action: Action): State => {
         },
         quote: {
           ...state.quote,
-          value: action.payload.value * action.payload.quoteRate,
+          value: roundToDecimals(action.payload.value * action.payload.quoteRate),
         },
       };
 
@@ -43,7 +44,7 @@ const reducer = (state: State, action: Action): State => {
         },
         base: {
           ...state.base,
-          value: action.payload.value * action.payload.quoteRate,
+          value: roundToDecimals(action.payload.value / action.payload.quoteRate),
         },
       };
 
@@ -53,6 +54,11 @@ const reducer = (state: State, action: Action): State => {
         base: {
           ...state.base,
           currency: action.payload,
+          value: 0,
+        },
+        quote: {
+          ...state.quote,
+          value: 0,
         },
       };
 
@@ -62,6 +68,11 @@ const reducer = (state: State, action: Action): State => {
         quote: {
           ...state.quote,
           currency: action.payload,
+          value: 0,
+        },
+        base: {
+          ...state.base,
+          value: 0,
         },
       };
 
@@ -80,9 +91,11 @@ export const useConverterReducer = ({
   const initialState: State = {
     base: {
       currency: baseCurrency,
+      value: 0,
     },
     quote: {
       currency: quoteCurrency,
+      value: 0,
     },
   };
 
@@ -98,7 +111,7 @@ export const useConverterReducer = ({
     dispatch({ type: 'SET_BASE_VALUE', payload: { value, quoteRate } });
 
   const setQuoteValue = (value: number, quoteRate: number) =>
-    dispatch({ type: 'SET_BASE_VALUE', payload: { value, quoteRate } });
+    dispatch({ type: 'SET_QUOTE_VALUE', payload: { value, quoteRate } });
 
   return { base, quote, setQuoteCurrency, setBaseCurrency, setBaseValue, setQuoteValue };
 };

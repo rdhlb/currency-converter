@@ -18,7 +18,7 @@ export const CURRENCY_SYMBOLS: Record<CurrencyCode, string> = {
   CAD: '$',
 };
 
-export const RATES_POLL_INTERVAL = 10 * 10000;
+export const RATES_POLL_INTERVAL = 10 * 100000;
 
 export enum ROUTES {
   home = '/',

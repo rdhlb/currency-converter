@@ -1,13 +1,14 @@
 import Select, { StylesConfig } from 'react-select';
 
-import { AccountsByCurrency } from '../../App';
 import { CurrencyCode, ROUTES } from '../../constants';
+import { AccountsByCurrency } from '../../hooks/useAccountsReducer';
 import { Container, Amount, ExchangeLink } from './balance.styled';
 
 const selectStyles: StylesConfig<OptionType, false> = {
   container: (provided) => ({
     ...provided,
-    width: '20%',
+    minWidth: 200,
+    width: '30%',
   }),
 };
 
@@ -25,7 +26,7 @@ type Props = {
 export const Balance: React.FC<Props> = ({ activeAccount, accounts, setActiveAccount }) => {
   // TODO: DRY
   const activeAmount = `${accounts[activeAccount]?.amount} ${activeAccount}`;
-  // TODO: useMemo
+  // TODO: memo
   const accountsOptions: OptionType[] = Object.entries(accounts).map(
     ([currencyKey, accountData]) => ({
       value: currencyKey,
